@@ -1,0 +1,394 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>UMBRAE</title>
+<link href="./static/style.css" rel="stylesheet">
+<!-- <script type="text/javascript" src="./static/jquery.mlens-1.0.min.js"></script> 
+<script type="text/javascript" src="./static/jquery.js"></script> -->
+</head>
+
+<body>
+<div class="content">
+  <h1><strong>UMBRAE: Unified Multimodal Decoding of Brain Signals</strong></h1>
+  <p id="authors"><span>
+  <a href="https://weihaox.github.io"></a></span>
+  <a href="https://weihaox.github.io">Weihao Xia<sup>1</sup></a>
+  <a href="https://team.inria.fr/rits/membres/raoul-de-charette">Raoul de Charette<sup>2</sup></a>
+  <a href="https://www.cl.cam.ac.uk/~aco41">Cengiz Öztireli<sup>3</sup></a>
+  <a href="http://www.homepages.ucl.ac.uk/~ucakjxu">Jing-Hao Xue<sup>1</sup></a>
+  <br>
+  <br>
+    <span style="font-size: 18px; padding-right: 20px;"><sup>1</sup>University College London</span>
+    <span style="font-size: 18px; padding-right: 20px;"><sup>2</sup>Inria</span>
+    <span style="font-size: 18px; padding-right: 20px;"><sup>3</sup>University of Cambridge</span>
+</p>
+  <br>
+  <img src="./images/teaser.png" class="teaser-gif" style="width:100%;"><br>
+  <h3 style="text-align:center"><em>Multimodal Brain Decoding from our UMBRAE applied on the pratrained MLLMs with given prompts.</em></h3>
+    <font size="+2">
+          <p style="text-align: center;">
+            <a href="https://arxiv.org/pdf/2404.07202" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
+	      <a href="https://github.com/weihaox/UMBRAE" target="_blank">[Code]</a> &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="https://github.com/weihaox/UMBRAE" target="_blank">[Data]</a>
+          </p>
+    </font>
+</div>
+<div class="content">
+  <h2 style="text-align:center;">Abstract</h2>
+  <p>We address prevailing challenges in the brain-powered research, departing from the observation that the literature hardly recover accurate spatial information and require subject-specific models. To address these challenges, we propose UMBRAE, a unified multimodal decoding of brain signals. First, to extract instance-level conceptual and spatial details from neural signals, we introduce an efficient universal brain encoder for multimodal-brain alignment and recover object descriptions at multiple levels of granularity from subsequent multimodal large language model (MLLM). Second, we introduce a cross-subject training strategy that maps subject-specific features to a common feature space. This allows a model to be trained on multiple subjects without extra resources, even yielding superior results compared to subject-specific models. We further show that it supports weakly-supervised adaptation to new subjects, with only a fraction of the total training data. Experiments demonstrate that UMBRAE not only achieves superior results in the newly-introduced grounding tasks but also outperforms methods in well established tasks. To assess our method, we construct and share with the community a comprehensive brain understanding benchmark BrainHub. </p>
+
+  <p>
+    Keywords: <em>Multimodal Brain Decoding</em>, <em>Efficient Brain Encoder</em>, <em>Cross-Subject Training</em>, 
+    <em>Weakly-Supervised Adaptation</em>,
+    <em>Large Language Model</em>
+  </p>
+</div>
+<div class="content">
+  <h2>Method</h2>
+  <p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
+  </p>
+  <br>
+  <img class="summary-img" src="./images/overview.png" style="width:100%;"> <br>
+  <p>
+  Overview of UMBRAE.
+  Our brain encoder includes subject-specific tokenizers and a universal perceive encoder. Brain signals from multiple subjects are mapped into a common feature space, enabling cross-subject training and weakly-supervised subject adaptation. The brain encoder learns to align neural signals with image features. During inference, the learned encoder interacts with MLLMs and performs brain understanding tasks according to given prompts.</p>
+</div>
+
+<div class="content">
+  <h2>Demo Examples</h2>
+  <p>UMBRAE decodes multimodal explanations from brain signals.</p>
+<img class="summary-img" src="./images/demo_example.png" style="width:100%;">
+</div>
+
+
+
+<div class="content">
+
+  <h2>Brain Captioning</h2>
+  <p>
+    <!-- <p style="font-size: 18px"> -->
+    <!-- <h2 style="text-align:center;"><strong>Brain Captioning</strong></h2> -->
+    <!-- <strong>Brain Captioning</strong><br><br> -->
+    Brain Captioning aims at textually describing the primary content of a given brain response. Here are the brain captioning comparison (on S1). The Baselines include <a href="https://github.com/yu-takagi/StableDiffusionReconstruction" target="_blank">SDRecon</a>, <a href="https://arxiv.org/abs/2305.11560" target="_blank">BrainCap</a>, and <a href="https://onellm.csuhan.com/" target="_blank">OneLLM</a>. UMBRAE-S1 refers to our model trained only with subject S1, while UMBRAE denotes the model with cross-subject training. The left is the reference image.
+  </p>
+
+  <!-- start of captioning -->
+  <div class="container">
+      <table>
+          <tr> <td class="left-column" style="text-align: center;">
+              <b><em>Reference</em></b>
+              </td>
+              <td class="right-column">
+              <b><em>Captioning</em></b>
+              </td>
+          </tr>
+
+      <!-- example 1 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/3.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td> the sea with some trees in the fore, and mountains in the distance are red</td></tr>
+                    <tr><td>BrainCap</td> <td>a person is standing on a beach with a snowboard.</td></tr>
+                    <tr><td>OneLLM</td> <td>A group of people gathered on the beach flying kites.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A group of people riding boards on top of a beach.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A person is parasailing on a lake with mountains in the distance.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      <!-- example 2 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/4.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>the city of london from an perspective</td></tr>
+                    <tr><td>BrainCap</td> <td>a corner of a building with a train station.</td></tr>
+                    <tr><td>OneLLM</td> <td>A kitchen is seen through an open door.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A large building with a clock tower on top.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A large building with a clock tower on top.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 3 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/24.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>some animals in the wild area near to wildlife world</td></tr>
+                    <tr><td>BrainCap</td> <td>a large area of grass.</td></tr>
+                    <tr><td>OneLLM</td> <td>A man standing on a snowy slope skiing.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A giraffe is standing in a grassy field.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A giraffe is standing in a grassy field.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 4 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/43.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>a beach with rocks on the shore and ocean</td></tr>
+                    <tr><td>BrainCap</td> <td>a large body of water with some birds on it.</td></tr>
+                    <tr><td>OneLLM</td> <td>A foggy day in San Francisco with a bus and a streetlamp.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A group of birds standing on top of a sandy beach.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A flock of birds standing on a body of water.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 5 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/49.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>some of the amazingly colorful african animals, the only because its natural habitat is</td></tr>
+                    <tr><td>BrainCap</td> <td>a close up of a person with a ball</td></tr>
+                    <tr><td>OneLLM</td> <td>A black and white sheep standing next to a green bush.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A small bird is sitting on a tree branch.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A bird is sitting on the branches of a tree.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      <!-- example 6 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/181.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>an abandoned house and two of her babies</td></tr>
+                    <tr><td>BrainCap</td> <td>a couple of animals that are in the grass.</td></tr>
+                    <tr><td>OneLLM</td> <td>A group of three sheep standing next to each other.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>Three sheep standing next to each other on a grassy field.</td></tr>
+                    <tr><td>UMBRAE</td> <td>Three sheep standing near each other in a field.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 7 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/961.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>a man on a motorcycle riding across the ocean while another man standing on a ramp</td></tr>
+                    <tr><td>BrainCap</td> <td>a group of people on a field with a dog.</td></tr>
+                    <tr><td>OneLLM</td> <td>A man talking on a cell phone while skiing.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A group of people riding skis on top of a snow covered slope.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A group of people riding skis on top of a snow covered slope.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 8 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/981.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 45px;">SDRecon</td> <td>an empty room with couch in it</td></tr>
+                    <tr><td>BrainCap</td> <td>a room with a large window and a sink.</td></tr>
+                    <tr><td>OneLLM</td> <td>A large silver bed sitting in a room.</td></tr>
+                    <tr><td>UMBRAE-S1</td> <td>A living room filled with furniture and a large window.</td></tr>
+                    <tr><td>UMBRAE</td> <td>A living room filled with furniture and a large window.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      </table>
+  </div>
+  <!-- end of captioning -->
+
+  <p>
+     Below are the Brain Captioning results on different subjects. “COCO” is the ground truth caption in the COCO dataset. We excerpt the first caption if there are multiple captions for the same image. <a href="https://github.com/shikras/shikra" target="_blank">Shikra-w/img</a> is the result using the ground truth images as input. Results for all four subjects (S1, S2, S5, and S7) are from our cross-subject UMBRAE model.
+  </p>
+
+  <!-- start of subject captioning -->
+  <div class="container">
+      <table>
+          <tr> <td class="left-column" style="text-align: center;">
+              <b><em>Reference</em></b>
+              </td>
+              <td class="right-column">
+              <b><em>Captioning</em></b>
+              </td>
+          </tr>
+
+      <!-- example 1 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/207.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>A bathroom with a vanity mirror sitting above a toilet next to a bathtub.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A bathroom with a toilet, sink and a television.</td></tr>
+                    <tr><td>S1</td> <td>A bathroom with a toilet, sink and mirror.</td></tr>
+                    <tr><td>S2</td> <td>A bathroom with a sink, mirror and toilet.</td></tr>
+                    <tr><td>S5</td> <td>A kitchen with a stove, sink, and cabinets</td></tr>
+                    <tr><td>S7</td> <td>A bathroom with a toilet, sink and bathtub.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 2 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/234.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>A picture of a cat and some luggage.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A cat sitting on a suitcase with clothes on a table.</td></tr>
+                    <tr><td>S1</td> <td>A cat is sitting on top of a closed suitcase.</td></tr>
+                    <tr><td>S2</td> <td>A cat is laying down on a soft surface.</td></tr>
+                    <tr><td>S5</td> <td>A cat is laying on top of a bed.</td></tr>
+                    <tr><td>S7</td> <td>A cat laying on top of a bed in a room.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      <!-- example 3 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/235.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>A large field of grass with sheep grazing on the land.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A herd of sheep graze in a lush green field.</td></tr>
+                    <tr><td>S1</td> <td>A large mountain range filled with lots of trees.</td></tr>
+                    <tr><td>S2</td> <td>The image shows a great wilderness of mountains.</td></tr>
+                    <tr><td>S5</td> <td>A large mountain range is shown with a sky in the background.</td></tr>
+                    <tr><td>S7</td> <td>A large field with a mountain range in the background.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      <!-- example 4 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/237.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>A man riding a snowboard down a hill.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A skier is going down a snowy hill.</td></tr>
+                    <tr><td>S1</td> <td>A person in a ski outfit skiing down a slope.</td></tr>
+                    <tr><td>S2</td> <td>A man riding a surfboard on top of a wave.</td></tr>
+                    <tr><td>S5</td> <td>A person on skis is skiing on a snowy slope.</td></tr>
+                    <tr><td>S7</td> <td>A person riding a snowboard on top of a snow covered slope.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      <!-- example 5 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/240.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>Double decker bus on the street next to buildings.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A double decker bus is parked outside a building.</td></tr>
+                    <tr><td>S1</td> <td>A transit bus riding down a street with buildings around.</td></tr>
+                    <tr><td>S2</td> <td>A passenger bus that is driving down the street.</td></tr>
+                    <tr><td>S5</td> <td>A large bus is traveling down the street.</td></tr>
+                    <tr><td>S7</td> <td>A bus driving down the street near another bus.</td></tr>
+                  </table>
+              </td>
+          </tr>
+      <!-- example 6 -->
+          <tr>
+              <td class="left-column" style="text-align: center;">
+                  <img src="images/reference/242.jpg" style="width:45%;">
+              </td>
+              <td class="right-column" style="text-align: center;">
+                  <table>
+                    <tr><td style="padding-right: 150px;">COCO</td> <td>A person holding a tennis racket in their hand.</td></tr>
+                    <tr><td>Shikra-w/img</td> <td>A young man in an orange shirt playing tennis.</td></tr>
+                    <tr><td>S1</td> <td>A woman holding a tennis racquet on top of a tennis court.</td></tr>
+                    <tr><td>S2</td> <td>A woman holding a tennis racket on a tennis court.</td></tr>
+                    <tr><td>S5</td> <td>A woman standing on a tennis court holding a racket.</td></tr>
+                    <tr><td>S7</td> <td>A man holding a tennis racquet on a tennis court.</td></tr>
+                  </table>
+              </td>
+          </tr>
+
+      </table>
+  </div>
+  <!-- end of subject captioning -->
+</div>
+
+
+<!-- Brain Grounding -->
+<div class="content">
+  <h2>Brain Grounding</h2>
+  <p>
+    Brain Grounding is the counterpart of visual grounding and seeks to recover spatial locations from brain signals by inferring coordinates. Here are the Brain Grounding results from UMBRAE using different task prompts. Reference images are visual stimuli for input brain responses and are just used here for visualization. 
+  </p>
+  <img class="summary-img" src="./images/grounding_task.png" style="width:100%;">
+  <p>
+    Below are the UMBRAE Brain Grounding results of different subjects.
+  </p>
+  <img class="summary-img" src="./images/grounding_sub.png" style="width:100%;">
+</div>
+
+<!-- Brain Retrieval -->
+<div class="content">
+  <h2>Brain Retrieval</h2>
+  <p>
+    The forward retrieval (top) is to find the correct image embedding given a brain embedding. Conversely, the backward retrieval (bottom) aims to locate the correct brain embedding given an image embedding.
+  </p>
+  <img class="summary-img" src="./images/brain_retrieval.png" style="width:100%;">
+</div>
+
+<!-- Visual Decoding -->
+<div class="content">
+  <p style="font-size: 18px">
+    <h2>Visual Decoding</h2>
+    <!-- <strong>Visual Decoding</strong><br><br> -->
+    Despite that our method is not specifically designed for the task of visual decoding (fMRI-to-image reconstruction), our predicted textual and visual cues can be used for the final image reconstruction by using a variety of pretrained image generation models. These models include text-to-image <a href="https://arxiv.org/abs/2112.10752" target="_blank">SD</a>, <a href="https://arxiv.org/abs/2307.01952" target="_blank">SD-XL</a>, and <a href="https://github.com/ai-forever/Kandinsky-3" target="_blank">Kandinsky3</a>, a layout-to-image <a href="https://gligen.github.io/" target="_blank">GLIGEN</a>, and a multiple-condition <a href="https://github.com/SHI-Labs/Versatile-Diffusion" target="_blank">Versatile Diffusion</a>. 
+  </p>
+  <img class="summary-img" src="./images/visual_decoding.png" style="width:80%;"><br><br>
+</div>
+
+
+<div class="content"> 
+  <h2>BrainHub</h2>
+  <p>For evaluation, we introduce BrainHub, a brain understanding benchmark, based on <a href="https://naturalscenesdataset.org" target="_blank">NSD</a> and <a href="https://cocodataset.org" target="_blank">COCO</a>.</p>
+  <p>There are 982 test images, 80 classes, 4,913 captions, and 5,829 boundingboxes. For grounding evaluation, we further group the 80 classes of COCO into 4 salience categories according to their salience in images: Salient (S), Salient Creatures (SC), Salient Objects (SO), and Inconspicuous (I). 
+  <!-- Note that ‘Salient’ is the combination of Salient Creatures and Objects.  -->
+The illustration shows the statistics and mapping of our categories, w.r.t. COCO classes.</p>
+<img class="summary-img" src="./images/brainhub.png" style="width:85%;">
+</div>
+
+</div>
+<div class="content">
+  <h2>BibTex</h2>
+  <code> @article{xia2024umbrae,<br>
+  &nbsp;&nbsp;title={UMBRAE: Unified Multimodal Decoding of Brain Signals},<br>
+  &nbsp;&nbsp;author={Xia, Weihao and de Charette, Raoul and Öztireli, Cengiz and Xue, Jing-Hao},<br>
+  &nbsp;&nbsp;booktitle={arxiv preprint:arxiv 2404.07202},<br>
+  &nbsp;&nbsp;year={2024}<br>
+  } </code> 
+</div>
+
+<div class="content" id="acknowledgements">
+  <p>
+    Acknowledgements: The project template is taken from <a href="https://dreambooth.github.io/">DreamBooth</a>.
+  </p>
+</div>
+
+</body>
+</html>

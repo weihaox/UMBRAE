@@ -40,10 +40,10 @@
 
 <br/>
 
-UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a universal brain encoder for multimodal-brain alignment and recover conceptual and spatial details at different levels from multimodal large language models. (2) We introduce cross-subject training to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model, yielding better results than focusing on a single subject. (3) For evaluation, we introduce BrainHub, a brain understanding benchmark, based on NSD and COCO.
+<p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
 
 ## News :triangular_flag_on_post:
-- [2024/03/15] Both <a href="https://weihaox.github.io/BrainX">project</a> and <a href="https://arxiv.org/abs/2310.02265">arXiv</a> are available.
+- [2024/03/15] Both <a href="https://weihaox.github.io/UMBRAE">project</a> and <a href="https://arxiv.org/pdf/2404.07202">arXiv</a> are available.
 
 ## Method
 
@@ -59,7 +59,7 @@ Overview of UMBRAE. Our brain encoder includes subject-specific tokenizers and a
 @article{xia2024umbrae,
   author    = {Xia, Weihao and de Charette, Raoul and Öztireli, Cengiz and Xue, Jing-Hao},
   title     = {UMBRAE: Unified Multimodal Decoding of Brain Signals},
-  journal   = {arxiv preprint:arxiv 2310.02265},
+  journal   = {arxiv preprint:arxiv 2404.07202},
   year      = {2024},
 }
 ```
