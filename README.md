@@ -98,14 +98,41 @@ python inference_rec.py --data_path 'nsd_data' --fmri_encoder 'brainx' \
     --save_path 'evaluation/eval_bbox_rec/rec_results/umbrae/sub01_dim1024'
 ```
 
+## Training
+
+### Single-Subject Training
+
+```bash
+accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train.py \
+                --data_path 'nsd_data' --fmri_encoder 'brainxs' \
+                --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'  
+```
+
+### Cross-Subject Training
+
+```bash
+accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx.py \
+                --data_path 'nsd_data' --fmri_encoder 'brainx' --batch_size 128 --num_epochs 300 \
+                --model_save_path 'train_logs/demo_cross_subject' --subj 1 2 5 7  
+```                
+
+### Weakly-Supervised Subject Adaptation
+
+If you would like to adapt to a new subject, for example, S7, first train a model with other available subjects (S1, S2, S5) using the above cross-subject training. Then train the new subject using the following command.
+
+```bash
+accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx_adaptation.py \
+                --data_path '/home/wx258/project/nsd_data' --fmri_encoder 'brainxc' --batch_size 128 --num_epochs 240 \
+                --encoder_path 'train_logs/demo_cross_subject/brainx_adaptation_125/last.pth' \
+                --subj 7 --data_ratio 1.0 --model_save_path 'train_logs/demo_weak_adaptation/brainx_adaptation_7_1.0'
+```
+
 ## Evaluation
 
 The benchmark, including groundtruth data, evaluation scripts, and baseline results, is in [brainhub](https://github.com/weihaox/BrainHub).
 
 1. Download `brainhub` to the root path: `git clone https://github.com/weihaox/BrainHub`
-
 2. Process groundtruth test images: `python processing/decode_images.py`
-
 3. Run evaluation for brain captioning and grounding:
 
 ```bash
@@ -114,17 +141,21 @@ for sub in 1 2 5 7
 do
     python eval_caption.py ../umbrae/evaluation/caption_results/umbrae/sub0${sub}_dim1024/fmricap.json \
         caption/images --references_json caption/fmri_cococap.json
-done
-```
-
-```bash
-for sub in 1 2 5 7
-do
     python eval_bbox_rec.py --path_out "../umbrae/evaluation/bbox_results/umbrae/sub0${sub}_dim1024"
 done
 ```
 
 We also provide baseline results associated with BrainHub, including the captioning results from [SDRecon](https://github.com/yu-takagi/StableDiffusionReconstruction), [BrainCap](https://arxiv.org/abs/2305.11560), and [OneLLM](https://onellm.csuhan.com/), as well as the captioning and grounding results from [UMBRAE](https://weihaox.github.io/UMBRAE/). 
+
+## TODO
+- [x] Release inference scripts and pretrained checkpoints.
+- [x] Update training scripts
+- [ ] Train on all 8 subjects in NSD.
+- [ ] Support other MLLMs such as NExT-Chat, CogVLM, Genixer
+
+## Acknowledgements
+
+We thank the authors of [SDRecon](https://github.com/yu-takagi/StableDiffusionReconstruction), [BrainCap](https://arxiv.org/abs/2305.11560), and [OneLLM](https://onellm.csuhan.com/) for providing the codes or the results. We also express gratitude for [NSD](https://naturalscenesdataset.org/) and [COCO](https://cocodataset.org/#home), which were used to construct our brainhub. The training script is based on [MindEye](https://medarc-ai.github.io/mindeye/). We utilize the pretrained models [Shikra](https://github.com/shikras/shikra) and [LLaVA](https://llava-vl.github.io/) as the MLLMs. Thanks for the awesome research works.
 
 ## Citation
 
