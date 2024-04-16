@@ -43,6 +43,8 @@
 <p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
 
 ## News :triangular_flag_on_post:
+- [2024/04/16] Provide a [Colab](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp) Demo for inference.
+- [2024/04/13] Update scripts for single-subject, cross-subject training, and new subject adaptation.
 - [2024/04/12] Inference and pretrained model available. Training code coming up soon.
 - [2024/04/11] <a href="https://github.com/weihaox/BrainHub">BrainHub</a> is available.
 - [2024/03/15] Both <a href="https://weihaox.github.io/UMBRAE">project</a> and <a href="https://arxiv.org/pdf/2404.07202">arXiv</a> are available.
@@ -145,11 +147,12 @@ do
 done
 ```
 
-We also provide baseline results associated with BrainHub, including the captioning results from [SDRecon](https://github.com/yu-takagi/StableDiffusionReconstruction), [BrainCap](https://arxiv.org/abs/2305.11560), and [OneLLM](https://onellm.csuhan.com/), as well as the captioning and grounding results from [UMBRAE](https://weihaox.github.io/UMBRAE/). 
+We also provide baseline results associated with [BrainHub](https://github.com/weihaox/BrainHub/tree/main/caption/comparison), including the captioning results from [SDRecon](https://github.com/yu-takagi/StableDiffusionReconstruction), [BrainCap](https://arxiv.org/abs/2305.11560), and [OneLLM](https://onellm.csuhan.com/), as well as the captioning and grounding results from [UMBRAE](https://weihaox.github.io/UMBRAE/). 
 
 ## TODO
 - [x] Release inference scripts and pretrained checkpoints.
-- [x] Update training scripts
+- [x] Update training scripts.
+- [x] Provide online demo.
 - [ ] Train on all 8 subjects in NSD.
 - [ ] Support other MLLMs such as NExT-Chat, CogVLM, Genixer
 

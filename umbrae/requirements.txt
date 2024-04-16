@@ -28,3 +28,4 @@ kornia
 umap-learn
 pycocoevalcap
 wcwidth
+huggingface_hub

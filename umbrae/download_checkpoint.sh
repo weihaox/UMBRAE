@@ -7,4 +7,4 @@
 # @Desc    :   download Checkpoints from Hugging Face
 # ------------------------------------------------------------------
 
-python -c  'from huggingface_hub import snapshot_download; snapshot_download(repo_id="weihaox/brainx", repo_type="dataset", local_dir="./", , ignore_patterns=["all_images.pt", ".gitattributes"])'
+python -c  'from huggingface_hub import snapshot_download; snapshot_download(repo_id="weihaox/brainx", repo_type="dataset", local_dir="./", ignore_patterns=["all_images.pt", ".gitattributes"])'
