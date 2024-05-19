@@ -84,26 +84,26 @@ bash download_checkpoint.sh
 Our method inherits multimodal understanding capabilities of MLLMs, enabling the switch between different tasks through different prompts. You can either use the prompts listed in our paper or create customised instructions according to actual needs. Please specify brainx-v-1-4 or brainx.
 
 ```bash
+exp='brainx-v-1-4' # 'brainx'
+
 prompt_caption='Describe this image <image> as simply as possible.'
-prompt_ground='Please interpret this image and give coordinates [x1,y1,x2,y2] for each object you mention.'
 
 for sub in 1 2 5 7
 do
-python inference.py --fmri_encoder 'brainx' --subj $sub --prompt "$prompt_ground" \
-    --data_path 'nsd_data' --brainx_path 'train_logs/brainx.pth' \
-    --save_path "evaluation/eval_caption/${exp}/sub0${sub}_dim1024"
+python inference.py --data_path 'nsd_data' --fmri_encoder 'brainx' --subj $sub \
+    --prompt "$prompt_caption" --brainx_path "train_logs/${exp}/last.pth" \
+    --save_path "evaluation/eval_caption/${exp}"
 done
 ```
 
 Given that identified classes might be named differently, or simply absent from ground truth labels, we evaluate bounding boxes through REC. We use prompt `"Locate <expr> in <image> and provide its coordinates, please"`, but others like `"Can you point out <expr> in the image and provide the bounding boxes of its location?"` shall also work.
 
 ```bash
-exp='brainx-v-1.4' # 'brainx'
 for sub in 1 2 5 7
 do
     python inference_rec.py --data_path 'nsd_data' --fmri_encoder 'brainx' \
       --subj $sub --brainx_path "train_logs/${exp}/last.pth" \
-      --save_path "evaluation/eval_bbox_rec/${exp}/sub0${sub}_dim1024" 
+      --save_path "evaluation/eval_bbox_rec/${exp}/sub0${sub}_dim1024"
 done
 ```
 
@@ -114,7 +114,7 @@ done
 ```bash
 accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train.py \
     --data_path 'nsd_data' --fmri_encoder 'brainxs' --subj 1 \
-    --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'  
+    --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'
 ```
 
 ### Cross-Subject Training
@@ -122,7 +122,7 @@ accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train.py \
 ```bash
 accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx.py \
     --data_path 'nsd_data' --fmri_encoder 'brainx' --batch_size 128 --num_epochs 300 \
-    --model_save_path 'train_logs/demo_cross_subject' --subj 1 2 5 7  
+    --model_save_path 'train_logs/demo_cross_subject' --subj 1 2 5 7
 ```                
 
 ### Weakly-Supervised Subject Adaptation
