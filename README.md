@@ -43,6 +43,7 @@
 <p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
 
 ## News :triangular_flag_on_post:
+- [2024/05/18] Update v1.4 checkpoint and [Leaderboard](https://github.com/weihaox/BrainHub/tree/main?tab=readme-ov-file#leaderboard).
 - [2024/04/16] Provide a [Colab](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp) Demo for inference.
 - [2024/04/13] Update scripts for single-subject, cross-subject training, and new subject adaptation.
 - [2024/04/12] Inference and pretrained model available. Training code coming up soon.
@@ -56,7 +57,6 @@ Overview of UMBRAE. Our brain encoder includes subject-specific tokenizers and a
 <div align="center"><tr>
     <img src="docs/images/overview.png" width="90%"/>
 </tr></div>
-
 
 ## Installation 
 
@@ -81,23 +81,30 @@ bash download_checkpoint.sh
 
 ## Inference
 
-Our method inherits multimodal understanding capabilities of MLLMs, enabling the switch between different tasks through different prompts. You can either use the prompts listed in our paper or create customised instructions according to actual needs.
+Our method inherits multimodal understanding capabilities of MLLMs, enabling the switch between different tasks through different prompts. You can either use the prompts listed in our paper or create customised instructions according to actual needs. Please specify brainx-v-1-4 or brainx.
 
 ```bash
 prompt_caption='Describe this image <image> as simply as possible.'
 prompt_ground='Please interpret this image and give coordinates [x1,y1,x2,y2] for each object you mention.'
 
-python inference.py --fmri_encoder 'brainx' --subj 1 --prompt "$prompt_ground" \
+for sub in 1 2 5 7
+do
+python inference.py --fmri_encoder 'brainx' --subj $sub --prompt "$prompt_ground" \
     --data_path 'nsd_data' --brainx_path 'train_logs/brainx.pth' \
-    --save_path 'evaluation/eval_caption/caption_results/umbrae/sub01_dim1024'
+    --save_path "evaluation/eval_caption/${exp}/sub0${sub}_dim1024"
+done
 ```
 
 Given that identified classes might be named differently, or simply absent from ground truth labels, we evaluate bounding boxes through REC. We use prompt `"Locate <expr> in <image> and provide its coordinates, please"`, but others like `"Can you point out <expr> in the image and provide the bounding boxes of its location?"` shall also work.
 
 ```bash
-python inference_rec.py --data_path 'nsd_data' --fmri_encoder 'brainx' \
-     --subj 1 --brainx_path 'train_logs/brainx.pth' \
-    --save_path 'evaluation/eval_bbox_rec/rec_results/umbrae/sub01_dim1024'
+exp='brainx-v-1.4' # 'brainx'
+for sub in 1 2 5 7
+do
+    python inference_rec.py --data_path 'nsd_data' --fmri_encoder 'brainx' \
+      --subj $sub --brainx_path "train_logs/${exp}/last.pth" \
+      --save_path "evaluation/eval_bbox_rec/${exp}/sub0${sub}_dim1024" 
+done
 ```
 
 ## Training
@@ -106,16 +113,16 @@ python inference_rec.py --data_path 'nsd_data' --fmri_encoder 'brainx' \
 
 ```bash
 accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train.py \
-                --data_path 'nsd_data' --fmri_encoder 'brainxs' \
-                --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'  
+    --data_path 'nsd_data' --fmri_encoder 'brainxs' --subj 1 \
+    --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'  
 ```
 
 ### Cross-Subject Training
 
 ```bash
 accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx.py \
-                --data_path 'nsd_data' --fmri_encoder 'brainx' --batch_size 128 --num_epochs 300 \
-                --model_save_path 'train_logs/demo_cross_subject' --subj 1 2 5 7  
+    --data_path 'nsd_data' --fmri_encoder 'brainx' --batch_size 128 --num_epochs 300 \
+    --model_save_path 'train_logs/demo_cross_subject' --subj 1 2 5 7  
 ```                
 
 ### Weakly-Supervised Subject Adaptation
@@ -123,10 +130,13 @@ accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx.
 If you would like to adapt to a new subject, for example, S7, first train a model with other available subjects (S1, S2, S5) using the above cross-subject training. Then train the new subject using the following command.
 
 ```bash
+sub=7
+data_ratio=1.0
 accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx_adaptation.py \
-                --data_path '/home/wx258/project/nsd_data' --fmri_encoder 'brainxc' --batch_size 128 --num_epochs 240 \
-                --encoder_path 'train_logs/demo_cross_subject/brainx_adaptation_125/last.pth' \
-                --subj 7 --data_ratio 1.0 --model_save_path 'train_logs/demo_weak_adaptation/brainx_adaptation_7_1.0'
+    --data_path 'nsd_data' --fmri_encoder 'brainxc' --batch_size 128 --num_epochs 240 \
+    --subj $sub --data_ratio $data_ratio \
+    --encoder_path 'train_logs/demo_cross_subject/brainx_adaptation_125/last.pth' \
+    --model_save_path "train_logs/demo_weak_adaptation/brainx_adaptation_${sub}_${data_ratio}"
 ```
 
 ## Evaluation
@@ -141,9 +151,9 @@ The benchmark, including groundtruth data, evaluation scripts, and baseline resu
 cd BrainHub
 for sub in 1 2 5 7
 do
-    python eval_caption.py ../umbrae/evaluation/caption_results/umbrae/sub0${sub}_dim1024/fmricap.json \
+    python eval_caption.py ../umbrae/evaluation/eval_caption/${exp}/sub0${sub}_dim1024/fmricap.json \
         caption/images --references_json caption/fmri_cococap.json
-    python eval_bbox_rec.py --path_out "../umbrae/evaluation/bbox_results/umbrae/sub0${sub}_dim1024"
+    python eval_bbox_rec.py --path_out "../umbrae/evaluation/eval_bbox_rec/${exp}/sub0${sub}_dim1024"
 done
 ```
 
