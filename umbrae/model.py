@@ -109,6 +109,7 @@ class Perceiver(nn.Module):
         inputs_llm = self.perceiver(image_features)
         return self.llm_proj(inputs_llm)
 
+# brain encoder for corss-subject training and inference
 class BrainX(nn.Module):
     def __init__(self, hidden_dim=1024, out_dim=1024, num_latents=256, use_token=False, use_norm=False, act_first=False):
         super().__init__()
@@ -151,5 +152,50 @@ class BrainX(nn.Module):
         if self.use_token:
             token = self.token[modal].repeat(x.size(0), 1, 1)
             x = torch.cat([x, token], dim=1)
+        x = self.perceiver(x)
+        return x
+
+# brain encoder for single-subject training and inference
+class BrainXS(nn.Module):
+    def __init__(self, in_dim=15724, h=1024, out_dim=1024, num_latents=256):
+        super().__init__()
+        self.lin1 = nn.Linear(1, num_latents)
+        self.lin2 = nn.Linear(in_dim, h)
+
+        self.perceiver = Perceiver(patch_embed_dim=h, hidden_size=out_dim, num_latents=num_latents)
+        
+    def forward(self, x):
+        x = x.unsqueeze(1) # [B, 1, 15724]
+        x = x.transpose(1, 2)
+        x = self.lin1(x)
+        
+        x = x.transpose(1, 2)
+        x = self.lin2(x)
+        x = self.perceiver(x)
+        return x
+
+# brain encoder for weakly-supervised adaptation (data-efficient training)
+class BrainXC(nn.Module):
+    def __init__(self, hidden_dim=1024, out_dim=1024, num_latents=256, sub=7, freeze_encoder=True):
+        super().__init__()
+        self.num_voxels = {1: 15724, 2: 14278, 3: 15226, 4: 13153, 5: 13039, 6: 17907, 7: 12682, 8: 14386}
+
+        self.lin1 = nn.Linear(1, num_latents)
+        self.lin2 = nn.Linear(self.num_voxels.get(sub), hidden_dim)
+        self.perceiver = Perceiver(patch_embed_dim=hidden_dim, hidden_size=out_dim, num_latents=num_latents)  
+
+        if freeze_encoder:
+            for param in self.perceiver.parameters():
+                param.requires_grad = False
+                # param.data = param.data.half()    
+
+    def forward(self, x):
+        x = x.unsqueeze(1)
+        x = x.transpose(1, 2)
+        x = self.lin1(x)
+        
+        x = x.transpose(1, 2)
+        x = self.lin2(x)
+        # with torch.no_grad():
         x = self.perceiver(x)
         return x
