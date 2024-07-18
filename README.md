@@ -1,6 +1,6 @@
 <div align="center">
 
-<h2>UMBRAE: Unified Multimodal Decoding of Brain Signals</h2>
+<h2>UMBRAE: Unified Multimodal Brain Decoding (ECCV 2024)</h2>
 
 <div>
     <a href='https://weihaox.github.io/' target='_blank'>Weihao Xia</a><sup>1</sup>&emsp;
@@ -28,6 +28,11 @@
   <img src="https://visitor-badge.laobi.icu/badge?page_id=weihaox/BrainX" width="8%" alt="visitor badge"/>
 </h4> -->
 
+<a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
+[![Paper](http://img.shields.io/badge/Paper-arxiv.2404.07202-B31B1B.svg)](https://arxiv.org/abs/2404.07202)
+[![Hugging Face](https://img.shields.io/badge/UMBRAE-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/datasets/weihaox/brainx)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp)
+
 </div>
 
 <div align="center"><tr> 
@@ -40,9 +45,10 @@
 
 <br/>
 
-<p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
+<p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
 
 ## News :triangular_flag_on_post:
+- [2024/07/01] UMBRAE is accepted to ECCV 2024.
 - [2024/05/18] Update v1.4 checkpoint and [Leaderboard](https://github.com/weihaox/BrainHub/tree/main?tab=readme-ov-file#leaderboard).
 - [2024/04/16] Provide a [Colab](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp) Demo for inference.
 - [2024/04/13] Update scripts for single-subject, cross-subject training, and new subject adaptation.
@@ -173,10 +179,10 @@ We thank the authors of [SDRecon](https://github.com/yu-takagi/StableDiffusionRe
 ## Citation
 
 ```bibtex
-@article{xia2024umbrae,
+@inproceedings{xia2024umbrae,
   author    = {Xia, Weihao and de Charette, Raoul and Öztireli, Cengiz and Xue, Jing-Hao},
-  title     = {UMBRAE: Unified Multimodal Decoding of Brain Signals},
-  journal   = {arxiv preprint:arxiv 2404.07202},
+  title     = {UMBRAE: Unified Multimodal Brain Decoding},
+  booktitle = {European Conference on Computer Vision (ECCV)},
   year      = {2024},
 }
 ```
