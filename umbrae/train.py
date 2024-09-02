@@ -8,7 +8,8 @@
 @Desc    :   single-subject training script
 @usage   :  accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train.py \
                 --data_path '/home/wx258/project/nsd_data' --fmri_encoder 'brainxs' \
-                --model_save_path 'train_logs/demo_single_subject/sub01_dim1024'   
+                --model_save_path 'train_logs/demo_single_subject/sub01_dim1024' \
+                --resume 'train_logs/demo_single_subject/sub01_dim1024/last.pth' 
 '''
 
 import os
@@ -62,6 +63,7 @@ parser.add_argument('--fmri_encoder', type=str, default='brainxs', help='type of
 parser.add_argument('--batch_size', type=int, default=128, help='batch size for training')
 parser.add_argument('--num_epochs', type=int, default=240, help='number of epochs of training')
 parser.add_argument('--seed', type=int, default=42)
+parser.add_argument('--resume', type=str, default='', help='path to checkpoint to resume training')
 parser.add_argument('--max_lr', type=float, default=3e-4)
 parser.add_argument('--recon_loss', type=str, default='mse', choices=['mse', 'l1', 'huber', 'quantile'])
 parser.add_argument('--use_image_aug', action=argparse.BooleanOptionalAction, default=True, help='whether to use image augmentation')
@@ -154,7 +156,7 @@ image2emb = BrainEncoder()
 image2emb.to(device)
 
 if fmri_encoder == 'brainxs':
-    voxel2emb = BrainXS(in_dim=num_voxels, h=1024, out_dim=feat_dim, num_latents=256)
+    voxel2emb = BrainXS(in_dim=num_voxels, hidden_dim=1024, out_dim=feat_dim, num_latents=256)
 else:
     raise ValueError("The fmri encoder is not implemented.")
 voxel2emb.to(device)
@@ -224,9 +226,24 @@ def save_ckpt(tag):
 print("\nDone with model preparations")
 
 # main loop for training
-epoch = 0
-losses, val_losses, lrs = [], [], []
-best_val_loss = 1e9
+if resume:
+    print(f"loading checkpoint from {resume}")
+    checkpoint = torch.load(resume, map_location='cpu')
+    voxel2emb.load_state_dict(checkpoint['model_state_dict'])
+    epoch = checkpoint['epoch']
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
+    losses = checkpoint['train_losses']
+    val_losses = checkpoint['val_losses']
+    lrs = checkpoint['lrs']
+    print(f"resuming from epoch {epoch}")
+    best_val_loss = min(val_losses)
+else:
+    # epoch = 0 if not resume else epoch + 1
+    epoch = 0
+    losses, val_losses, lrs = [], [], []
+    best_val_loss = 1e9
+    print(f"starting from scratch")
 
 voxel2emb, optimizer, train_dl, val_dl, lr_scheduler = accelerator.prepare(
 voxel2emb, optimizer, train_dl, val_dl, lr_scheduler

@@ -25,14 +25,14 @@ import torch
 from transformers import LlamaForCausalLM, LlamaTokenizer
 from torchvision.transforms import ToPILImage
 
-from model import BrainX
+from model import BrainX, BrainXS
 from utils import postprocess
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--shikra_path', default='model_weights/shikra-7b')
 parser.add_argument('--brainx_path', default='train_logs/training_demo/best.pth')
 parser.add_argument('--adapter_path', default='model_weights/mm_projector.bin')
-parser.add_argument('--fmri_encoder', type=str, default='brainx', help='type of brainnet', choices=['brainx'])
+parser.add_argument('--fmri_encoder', type=str, default='brainx', help='type of brainnet', choices=['brainx', 'brainxs'])
 parser.add_argument('--use_norm', type=bool, default=False, help='whether to use norm layer in the model')
 parser.add_argument('--use_token', type=bool, default=False, help='whether to use learnable token in the model')
 parser.add_argument('--feat_dim', type=int, help='output dimension of the fmri encoder', default=1024, choices=[1024, 4096])
@@ -88,6 +88,9 @@ kwargs = {'hidden_dim': 1024, 'out_dim': feat_dim, 'num_latents': 256, 'use_norm
 
 if fmri_encoder == 'brainx':
     voxel2emb = BrainX(**kwargs)
+elif fmri_encoder == 'brainxs':
+    # voxel2emb = BrainXS(in_dim=num_voxels, **kwargs)
+    voxel2emb = BrainXS(in_dim=num_voxels, hidden_dim=1024, out_dim=feat_dim, num_latents=256)
 else:
     raise ValueError("The fmri encoder is not implemented.")
 voxel2emb.to(device)
@@ -105,8 +108,10 @@ for val_i, (voxel, image) in enumerate(val_dl):
            # repeat_index = val_i % 3
             # voxel = voxel[:,repeat_index].float()
             voxel = torch.mean(voxel, axis=1).float()
-            
-            emb_voxel = voxel2emb(voxel.to(device), modal=f'fmri{subj}')
+            if fmri_encoder == 'brainx':
+                emb_voxel = voxel2emb(voxel.to(device), modal=f'fmri{subj}')
+            elif fmri_encoder == 'brainxs':
+                emb_voxel = voxel2emb(voxel.to(device))
                 
             emb_voxel_list.append(emb_voxel)
             if save_image:

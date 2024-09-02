@@ -154,15 +154,15 @@ class BrainX(nn.Module):
             x = torch.cat([x, token], dim=1)
         x = self.perceiver(x)
         return x
-
+    
 # brain encoder for single-subject training and inference
 class BrainXS(nn.Module):
-    def __init__(self, in_dim=15724, h=1024, out_dim=1024, num_latents=256):
+    def __init__(self, in_dim=15724, hidden_dim=1024, out_dim=1024, num_latents=256):
         super().__init__()
         self.lin1 = nn.Linear(1, num_latents)
-        self.lin2 = nn.Linear(in_dim, h)
+        self.lin2 = nn.Linear(in_dim, hidden_dim)
 
-        self.perceiver = Perceiver(patch_embed_dim=h, hidden_size=out_dim, num_latents=num_latents)
+        self.perceiver = Perceiver(patch_embed_dim=hidden_dim, hidden_size=out_dim, num_latents=num_latents)
         
     def forward(self, x):
         x = x.unsqueeze(1) # [B, 1, 15724]
