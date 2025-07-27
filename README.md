@@ -48,6 +48,7 @@
 <p>UMBRAE decodes multimodal explanations from brain signals. (1) We introduce a <b>universal brain encoder</b> for multimodal-brain alignment and recover conceptual and spatial details by using multimodal large language models. (2) We introduce <b>cross-subject training</b> to overcome unique brain patterns of different individuals. This allows brain signals from multiple subjects to be trained within the same model. (3) Our method supports <b>weakly-supervised subject adaptation</b>, enabling the training of a model for a new subject in a data-efficient manner. (4) For evaluation, we introduce <b>BrainHub</b>, a brain understanding benchmark, based on NSD and COCO.
 
 ## News :triangular_flag_on_post:
+- [2025/07/10] Check out [VINDEX](https://github.com/weihaox/VINDEX) and [BASIC](https://github.com/weihaox/BASIC) for finer-grained multimodal brain decoding and benchmarking.
 - [2024/07/01] UMBRAE is accepted to ECCV 2024.
 - [2024/05/18] Update v1.4 checkpoint and [Leaderboard](https://github.com/weihaox/BrainHub/tree/main?tab=readme-ov-file#leaderboard).
 - [2024/04/16] Provide a [Colab](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp) Demo for inference.
@@ -78,7 +79,7 @@ pip install -r requirements.txt
 
 The training and inference scripts support automatically downloading the dataset if the designated path is empty. However, this process can be quite slow. You can try the following script to download all data in advance if this happens. Please fill out the NSD [Data Access form](https://forms.gle/xue2bCdM9LaFNMeb7) and agree to the [Terms and Conditions](https://cvnlab.slite.page/p/IB6BSeW_7o/Terms-and-Conditions). 
 
-Download Checkpoints from [Hugging Face](https://huggingface.co/datasets/weihaox/brainx).
+Download Checkpoints from [Hugging Face](https://huggingface.co/datasets/weihaox/umbrae).
 
 ```bash
 bash download_data.sh
