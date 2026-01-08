@@ -14,7 +14,6 @@
     <sup>3</sup>University of Cambridge&emsp;
 </div>
 
-
 <br/>
 
 <!-- <h3 align="center">Preprint</h3> -->
@@ -32,6 +31,11 @@
 [![Paper](http://img.shields.io/badge/Paper-arxiv.2404.07202-B31B1B.svg)](https://arxiv.org/abs/2404.07202)
 [![Hugging Face](https://img.shields.io/badge/UMBRAE-%F0%9F%A4%97%20Hugging%20Face-blue)](https://huggingface.co/datasets/weihaox/brainx)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1VKd1gAB-6AIdMzBCG0J-U7h9vwsiKnHp)
+
+<div align="center">
+zero-shot multimodal brain decoding with universal representations across subjects and tasks
+</div>
+<br>
 
 </div>
 
@@ -64,6 +68,8 @@ Overview of UMBRAE. Our brain encoder includes subject-specific tokenizers and a
 <div align="center"><tr>
     <img src="docs/images/overview.png" width="90%"/>
 </tr></div>
+
+UMBRAE is a zero-shot method that can decode multimodal explanations without task-specific training, fine-tuning, or subject-level calibration.
 
 ## Installation 
 
@@ -146,6 +152,11 @@ accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx_
     --model_save_path "train_logs/demo_weak_adaptation/brainx_adaptation_${sub}_${data_ratio}"
 ```
 
+> [!NOTE]
+> Please refer to [VINDEX](https://github.com/weihaox/VINDEX) for a unified training framework supporting single-subject training, cross-subject training, and weakly-supervised subject adaptation.
+
+<!-- > For a cleaner and more extensible training pipeline, we recommend using [VINDEX](https://github.com/weihaox/VINDEX/blob/main/README.md#training), which unifies all training modes into a single script. For a cleaner and more extensible training pipeline, we recommend using VINDEX. -->
+
 ## Evaluation
 
 The benchmark, including groundtruth data, evaluation scripts, and baseline results, is in [brainhub](https://github.com/weihaox/BrainHub).
@@ -170,8 +181,8 @@ We also provide baseline results associated with [BrainHub](https://github.com/w
 - [x] Release inference scripts and pretrained checkpoints.
 - [x] Update training scripts.
 - [x] Provide online demo.
-- [ ] Train on all 8 subjects in NSD.
-- [ ] Support other MLLMs such as NExT-Chat, CogVLM, Genixer
+- [x] Train on all 8 subjects in NSD.
+- [x] Support other MLLMs such as NExT-Chat, CogVLM, Genixer
 
 ## Acknowledgements
 
