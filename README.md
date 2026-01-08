@@ -63,7 +63,7 @@ zero-shot multimodal brain decoding with universal representations across subjec
 
 ## Method
 
-Overview of UMBRAE. Our brain encoder includes subject-specific tokenizers and a universal perceive encoder. Brain signals from multiple subjects are mapped into a common feature space, enabling cross-subject training and weakly-supervised subject adaptation. The brain encoder learns to align neural signals with image features. During inference, the learned encoder interacts with MLLMs and performs brain understanding tasks according to given prompts.
+Overview of UMBRAE. Our brain encoder includes subject-specific tokenizers and a universal perceive encoder. Brain signals from multiple subjects are mapped into a common feature space, enabling cross-subject generalization and weakly-supervised adaptation. The brain encoder learns to align neural signals with image features. During inference, the learned encoder interacts with MLLMs and performs brain understanding tasks according to given prompts.
 
 <div align="center"><tr>
     <img src="docs/images/overview.png" width="90%"/>
@@ -153,9 +153,7 @@ accelerate launch --num_processes=1 --num_machines=1 --gpu_ids='0' train_brainx_
 ```
 
 > [!NOTE]
-> Please refer to [VINDEX](https://github.com/weihaox/VINDEX) for a unified training framework supporting single-subject training, cross-subject training, and weakly-supervised subject adaptation.
-
-<!-- > For a cleaner and more extensible training pipeline, we recommend using [VINDEX](https://github.com/weihaox/VINDEX/blob/main/README.md#training), which unifies all training modes into a single script. For a cleaner and more extensible training pipeline, we recommend using VINDEX. -->
+> For a cleaner and more extensible training pipeline, we recommend using [VINDEX](https://github.com/weihaox/VINDEX/blob/main/README.md#training), which unifies all training modes into a single script.
 
 ## Evaluation
 
