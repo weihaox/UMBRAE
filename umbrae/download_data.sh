@@ -20,6 +20,7 @@ done
 declare -a i_values=(1 2 5 7)
 
 # Download the train set
+train_destination="${destination}/webdataset_avg_split/train/"
 for i in "${i_values[@]}"; do
   for j in {0..17}; do
     url="https://huggingface.co/datasets/pscotti/naturalscenesdataset/resolve/main/webdataset_avg_split/train/train_subj0${i}_${j}.tar"    
@@ -28,13 +29,14 @@ for i in "${i_values[@]}"; do
 done
 
 # Download the validation set
+val_destination="${destination}/webdataset_avg_split/val/"
 for i in "${i_values[@]}"; do
     url="https://huggingface.co/datasets/pscotti/naturalscenesdataset/resolve/main/webdataset_avg_split/val/val_subj0${i}_0.tar"    
     wget -P "$val_destination" "$url"
-  done
 done
 
 # Download the test set
+test_destination="${destination}/webdataset_avg_split/test/"
 for i in "${i_values[@]}"; do
   for j in {0..1}; do
     url="https://huggingface.co/datasets/pscotti/naturalscenesdataset/resolve/main/webdataset_avg_split/test/test_subj0${i}_${j}.tar"    
